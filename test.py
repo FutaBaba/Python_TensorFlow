@@ -35,8 +35,6 @@ model.compile(optimizer='adam',
 #損失を最小化するようにモデルのパラメータ調整
 model.fit(x_train, y_train, epochs=5)
 
-model.fit(x_train, y_train, epochs=5)
-
 #モデル性能を検査
 model.evaluate(x_test,  y_test, verbose=2)
 
