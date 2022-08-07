@@ -9,14 +9,18 @@ mnist = tf.keras.datasets.mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
-#モデル
+#TensorFlow パラメータチューニング手動
+
+#パラメータ付きモデルを受け取って最も良いパラメータを返す関数
+
 model = tf.keras.models.Sequential([
-  #入力層
-  tf.keras.layers.Flatten(input_shape=(28, 28)),
+  tf.keras.layers.Conv2D(128,(3,3),activation='relu', input_shape=(28,28,1)),
+  tf.keras.layers.MaxPooling2D(2,2),
+  tf.keras.layers.Flatten(),
   #ノード数が128、活性化関数がreluである層
-  tf.keras.layers.Dense(117, activation='relu'),
+  tf.keras.layers.Dense(128, activation='relu'),
   #0.2の割合で出力を0にする
-  tf.keras.layers.Dropout(0.3),
+  tf.keras.layers.Dropout(0.2),
   #出力層
   tf.keras.layers.Dense(10)
 ])
@@ -28,7 +32,6 @@ loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 model.compile(optimizer='adam',
               loss=loss_fn,
               metrics=['accuracy'])
-
 #ニューラルネットワークの訓練
 model.fit(x_train, y_train, epochs=5)
 
