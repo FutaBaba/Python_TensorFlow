@@ -33,19 +33,42 @@ def make_model(layer_number,parameter_number):
     model.add(layers.Dense(10, activation='softmax'))
     return model
 
+def make_model_2(layer_number,parameter_number):
+    model = models.Sequential()
+    model.add(layers.Conv2D(parameter_number, (3, 3), activation='relu', input_shape=(28, 28, 1)))
+    for i in range(0,layer_number):
+        model.add(layers.MaxPooling2D((2, 2)))
+        model.add(layers.Conv2D(parameter_number, (3, 3), activation='relu'))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(parameter_number, activation='relu'))
+    model.add(layers.Dense(10, activation='softmax'))
+    return model
+
+def make_model_3(layer_number,parameter_number):
+    model = models.Sequential()
+    model.add(layers.Conv2D(parameter_number, (3, 3), activation='relu', input_shape=(28, 28, 1)))
+    for i in range(0,layer_number):
+        #model.add(layers.MaxPooling2D((2, 2)))
+        model.add(layers.Conv2D(parameter_number, (3, 3), activation='relu'))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(parameter_number, activation='relu'))
+    model.add(layers.Dense(10, activation='softmax'))
+    return model
+
 def parameter_test(model_function,set_function):
     n = 0
-    for i in range(0,3):
+    for i in range(0,13):
         mymodel = set_function(model_function,n,1)
         loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
         mymodel.compile(optimizer='adam',
               loss=loss_fn,
               metrics=['accuracy'])
         mymodel.fit(train_images, train_labels, epochs=5)
-        mymodel.evaluate(test_images,  test_labels, verbose=2)[1]
+        model_accuracy = mymodel.evaluate(test_images,  test_labels, verbose=2)[1]
+        print("babalog,",n,",",model_accuracy)
         n += 1
 
-parameter_test(make_model,set_parameter)
+parameter_test(make_model_3,set_parameter)
 
 def parameter_test_2(model_function):
     accuracy = 0
